@@ -6,7 +6,7 @@
 /*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 12:26:07 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/02 15:47:26 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/02 15:58:56 by raqroca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 
 ** complex
 ** This function sorts large lists (such as 100 or 500 numbers):
-** 1. First, it assigns each number a position (0, 1, 2...) according to its size.
-** 2. Then, it checks those numbers ‘bit by bit’ (like looking at each digit individually).
+** 1. First, it assigns each number a position (0, 1, 2...).
+** 2. Then, it checks those numbers ‘bit by bit’.
 ** 3. If a number has a “0” in that bit, it moves it to Stack B.
 ** 4. If it has a “1”, it leaves it in Stack A, sending it to the end.
 ** 5. At the end of each round, it returns everything from B to Stack A.
@@ -79,10 +79,26 @@ static void	assign_pos(t_list *stacka)
 	}
 }
 
+static void	radix_process(t_stack **stack, int i, int size)
+{
+	int	j;
+
+	j = 0;
+	while (j < size)
+	{
+		if ((((*stack)->stacka->pos >> i) & 1) == 0)
+			pb(stack);
+		else
+			ra(stack);
+		j++;
+	}
+	while ((*stack)->stackb != NULL)
+		pa(stack);
+}
+
 void	complex(t_stack **stack)
 {
 	int	i;
-	int	j;
 	int	size;
 	int	max_bits;
 
@@ -96,17 +112,7 @@ void	complex(t_stack **stack)
 	i = 0;
 	while (i < max_bits)
 	{
-		j = 0;
-		while (j < size)
-		{
-			if ((((*stack)->stacka->pos >> i) & 1) == 0)
-				pb(stack);
-			else
-				ra(stack);
-			j++;
-		}
-		while ((*stack)->stackb != NULL)
-			pa(stack);
+		radix_process(stack, i, size);
 		i++;
 	}
 }
