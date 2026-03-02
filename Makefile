@@ -19,7 +19,8 @@ parser.c \
 parse_int.c \
 simple.c \
 strverif.c \
-utils.c 
+utils.c \
+print_set.c
 
 BONUS_SOURCE = checker_bonus.c \
 parser.c \

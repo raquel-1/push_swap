@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 09:59:52 by acanadil          #+#    #+#             */
-/*   Updated: 2026/02/27 15:26:55 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/02 11:39:21 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static size_t	num_number(char **arg, t_flags *flags)
 	return (i);
 }
 
-t_list	*parser_int(char **arg, t_flags *flags, int f(void))
+t_list	*parser_int(char **arg, t_flags *flags)
 {
 	size_t	size;
 	t_list	*numbers;
@@ -109,6 +109,6 @@ t_list	*parser_int(char **arg, t_flags *flags, int f(void))
 	if (size == 0)
 		return (NULL);
 	numbers = NULL;
-	save_numbers(arg, flags, &numbers, f);
+	save_numbers(arg, flags, &numbers);
 	return (numbers);
 }

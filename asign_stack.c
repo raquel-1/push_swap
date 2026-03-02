@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:26:44 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/02 10:24:12 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/02 11:40:07 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	letercorrect(char **arg, t_list **stacka)
 	return (1);
 }
 
-void	save_numbers(char **arg, t_flags *flags, t_list **stacka, int f(void))
+void	save_numbers(char **arg, t_flags *flags, t_list **stacka)
 {
 	int		j;
 	char	*ptr;
@@ -87,6 +87,4 @@ void	save_numbers(char **arg, t_flags *flags, t_list **stacka, int f(void))
 		ft_flaclear(&flag);
 		j++;
 	}
-	if (*stacka == NULL)
-		f();
 }

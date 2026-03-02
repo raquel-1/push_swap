@@ -3,14 +3,98 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 10:36:03 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/02/24 13:19:06 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/02 12:32:17 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static t_stack	*asign(t_list *a)
+{
+	t_stack	*stack;
+	t_bench	*bench;
+
+	stack = ft_calloc(sizeof (t_stack), 1);
+	bench = ft_calloc(sizeof (t_bench), 1);
+	stack -> calc = bench;
+	stack -> stacka = a;
+	return (stack);
+}
+
+static int	found_flag(t_flags *flag, int pos)
+{
+	t_flags	*aux;
+
+	aux = flag;
+	while (aux)
+	{
+		if (aux -> num == pos)
+			return (1);
+		aux = aux -> next;
+	}
+	return (0);
+}
+
+static void	asign_bench(t_stack *sta, char *l, char *s, float d)
+{
+	sta -> calc -> disorder = d;
+	sta -> calc -> flag = l;
+	sta -> calc -> strategy = s;
+}
+
+static void	execute(t_stack *sta, t_flags *flags)
+{
+	float	d;
+
+	d = disorder(sta -> stacka);
+	if (found_flag(flags, 0))
+	{
+		asign_bench(sta, "Simple", "O(n^2)", d);
+		simple(&sta);
+	}
+	else if (found_flag(flags, 1))
+	{
+		asign_bench(sta, "Medium", "O(n^2)", d);
+		medium(&sta);
+	}
+	else if (found_flag(flags, 2))
+	{
+		asign_bench(sta, "Complex", "O(n log n)", d);
+		complex(&sta);
+	}
+	else
+	{
+		asign_bench(sta, "Adaptive", sel_strat(d), d);
+		adaptiv(&sta);
+	}
+}
+
+int	main(int argc, char **argv)
+{
+	t_list	*stacka;
+	t_stack	*stack;
+	t_flags	*flags;
+	char	*s;
+
+	flags = NULL;
+	if (argv < 1)
+		return (0);
+	argv++;
+	stacka = parser(argv, &flags, 2);
+	if (!stacka)
+		return (0);
+	stack = asign(stacka);
+	execute(stack, flags);
+	ft_flaclear(&flags);
+	free_stack(&stack);
+	if (found_flag(flags, 4))
+		print_bench(stack -> calc);
+	return (0);
+}
+
 /*
 int main(int argc, char **argv)
 {
@@ -115,4 +199,5 @@ int	main(void)
 	// free(stack);
 
 	return (0);
-}*/
+}
+*/

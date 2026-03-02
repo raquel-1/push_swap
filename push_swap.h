@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 13:24:08 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/02 11:06:38 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/02 12:30:16 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ void	medium(t_stack **order);
 void	complex(t_stack **order);
 void	adaptiv(t_stack **order);
 int		strverif(char *str1, char *str2);
-t_list	*parser(char **arg, t_flags **flags, int f(void), int fla);
-t_list	*parser_int(char **arg, t_flags *flags, int f(void));
+t_list	*parser(char **arg, t_flags **flags, int fla);
+t_list	*parser_int(char **arg, t_flags *flags);
 t_flags	*asignflag(const t_flags *flags, int j);
 int		verifflag(const t_flags *flag, char **leter);
 long	ft_atoi_long(const char *nptr);
 int		strverifall(char *str1, char *str2);
-void	save_numbers(char **arg, t_flags *flags, t_list **stacka, int f(void));
+void	save_numbers(char **arg, t_flags *flags, t_list **stacka);
 void	makemove(t_stack **order, char *move);
+char	*sel_strat(float sta);
+void	print_bench(t_bench *bench);
 
 int		get_min(t_list *stack);
 int		get_max(t_list *stack);
