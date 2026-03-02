@@ -6,7 +6,7 @@
 /*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 12:26:07 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/02 11:04:34 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/02 12:26:03 by raqroca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,33 @@ static void	assign_pos(t_list *stacka)
 		current->pos = count;
 		current = current->next;
 	}
+}
+
+void	complex(t_stack **stack)
+{
+	int	max_bits;
+	int	i;
+	int	j;
+	int	size;
+
+	if (!stack || !(*stack) || !(*stack)->stacka)
+		return ;
+	assign_pos((*stack)->stacka);
+	max_bits = count_bits(get_max((*stack)->stacka));
+	i = 0;
+	while (i < max_bits)
+	{
+		j = 0;
+		size = ft_lstsize((*stack)->stacka);
+		while (j++ < size)
+		{
+			if ((((*stack)->stacka->pos >> i) & 1) == 1)
+				ra(stack);
+			else
+				pb(stack);
+		}
+		i++;
+	}
+	while ((*stack)->stackb != NULL)
+		pa(stack);
 }
