@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   complex.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 12:26:07 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/02 17:21:41 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/04 10:21:19 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,14 @@ void	complex(t_stack **stack)
 	int	i;
 	int	size;
 	int	max_bits;
+	int	lon;
 
+	lon = ft_lstsize((*stack)-> stacka);
+	if (lon < 7)
+	{
+		simple(stack);
+		return ;
+	}
 	if (!stack || !(*stack) || !(*stack)->stacka)
 		return ;
 	if (is_sorted((*stack)->stacka))

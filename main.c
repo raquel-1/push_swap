@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 10:36:03 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/03 13:26:22 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/04 10:03:32 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	execute(t_stack *sta, t_flags *flags)
 	else if (found_flag(flags, 2))
 	{
 		asign_bench(sta, "Medium", "O(n√n)", d);
-		simple(&sta);
+		medium(&sta);
 	}
 	else if (found_flag(flags, 3))
 	{

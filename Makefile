@@ -23,8 +23,8 @@ utils.c \
 print_set.c \
 utils_sort.c \
 complex.c \
-adaptiv.c
-#medium.c
+adaptiv.c \
+medium.c
 
 BONUS_SOURCE = checker_bonus.c \
 parser.c \

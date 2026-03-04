@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 12:46:43 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/03 13:22:40 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/04 10:09:38 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static t_flags	*addflag(int fl, int p, char *fla)
 
 static int	no_repit(t_flags *flags)
 {
-	t_flags	*bench;
 	t_flags	*flag;
 	int		count;
 	int		countbench;
@@ -30,12 +29,11 @@ static int	no_repit(t_flags *flags)
 	countbench = 0;
 	count = 0;
 	flag = flags;
-	bench = flags;
 	while (flag)
 	{
 		if (flag -> num > 0)
 			count++;
-		if (bench -> num == 0)
+		if (flag -> num == 0)
 			countbench++;
 		flag = flag -> next;
 	}
@@ -95,13 +93,11 @@ t_list	*parser(char **arg, t_flags **flags, int fla, int w)
 	found_flags(arg, flags);
 	if (ft_flasize(*flags) > fla)
 	{
-		write(2, "Error\n", 6);
 		ft_flaclear(flags);
 		return (NULL);
 	}
 	if (!no_repit(*flags))
 	{
-		write(2, "Error\n", 6);
 		ft_flaclear(flags);
 		return (NULL);
 	}
