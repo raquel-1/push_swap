@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   complex.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 12:26:07 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/04 11:43:29 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/04 12:21:28 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	count_bits(int max_n)
 	return (n_bits);
 }
 
-static void	radix_part(t_stack **stack, int i, int size)
+static void	radix_part(t_stack **stack, int i, int size, int print)
 {
 	int	j;
 
@@ -59,16 +59,16 @@ static void	radix_part(t_stack **stack, int i, int size)
 	while (j < size)
 	{
 		if ((((*stack)->stacka->pos >> i) & 1) == 0)
-			pb(stack);
+			pb(stack, print);
 		else
-			ra(stack);
+			ra(stack, print);
 		j++;
 	}
 	while ((*stack)->stackb != NULL)
-		pa(stack);
+		pa(stack, print);
 }
 
-void	complex(t_stack **stack)
+void	complex(t_stack **stack, int print)
 {
 	int	i;
 	int	size;
@@ -82,14 +82,14 @@ void	complex(t_stack **stack)
 	size = ft_lstsize((*stack)->stacka);
 	if (size <= 5)
 	{
-		tiny_sort_by_pos(stack, size);
+		tiny_sort_by_pos(stack, size, print);
 		return ;
 	}
 	max_bits = count_bits(size - 1);
 	i = 0;
 	while (i < max_bits)
 	{
-		radix_part(stack, i, size);
+		radix_part(stack, i, size, print);
 		i++;
 	}
 }

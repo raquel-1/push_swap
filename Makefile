@@ -8,9 +8,6 @@ basic_mov.c \
 basic_mov_2stacks.c \
 basic_rYrr.c \
 basic_sYp.c \
-basic_rYrr_bonus.c \
-basic_sYp_bonus.c \
-mov_2stacks_bonus.c \
 disorder.c \
 ft_flags_utils.c \
 main.c \
@@ -36,10 +33,10 @@ get_next_line.c \
 get_next_line_utils.c \
 str_utils.c \
 basic_mov.c \
-mov_2stacks_bonus.c \
+mov_2stacks.c \
 basic_mov_2stacks.c \
-basic_rYrr_bonus.c \
-basic_sYp_bonus.c \
+basic_rYrr.c \
+basic_sYp.c \
 utils.c 
 
 OBJ = $(SOURCE:.c=.o)

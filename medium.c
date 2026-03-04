@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   medium.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 10:32:37 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/03 16:05:16 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/04 12:31:34 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	ft_sqrt(int n)
 	return (i - 1);
 }
 
-static void	push_max_to_a(t_stack **stack)
+static void	push_max_to_a(t_stack **stack, int print)
 {
 	int	size;
 	int	max_pos;
@@ -36,17 +36,17 @@ static void	push_max_to_a(t_stack **stack)
 	if (i <= size / 2)
 	{
 		while ((*stack)->stackb->pos != max_pos)
-			rb(stack);
+			rb(stack, print);
 	}
 	else
 	{
 		while ((*stack)->stackb->pos != max_pos)
-			rrb(stack);
+			rrb(stack, print);
 	}
-	pa(stack);
+	pa(stack, print);
 }
 
-void	medium(t_stack **stack)
+void	medium(t_stack **stack, int print)
 {
 	int	i;
 	int	chunk;
@@ -63,5 +63,5 @@ void	medium(t_stack **stack)
 		/////from a to b
 	}
 	while ((*stack)->stackb)
-		push_max_to_a(stack);
+		push_max_to_a(stack, print);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_sort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 11:02:07 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/03 11:46:30 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/04 12:34:44 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ sort_three: sorted - first bigger - second bigger - third bigger(else)
 ** the raw 'num' values, which could be negative or very large.
 */
 
-static void	sort_three(t_stack **stack)
+static void	sort_three(t_stack **stack, int print)
 {
 	int	first;
 	int	second;
@@ -34,23 +34,23 @@ static void	sort_three(t_stack **stack)
 		return ;
 	if (first > second && first > third)
 	{
-		ra(stack);
+		ra(stack, print);
 		if ((*stack)->stacka->num > (*stack)->stacka->next->num)
-			sa(stack);
+			sa(stack, print);
 	}
 	else if (second > first && second > third)
 	{
-		rra(stack);
+		rra(stack, print);
 		if ((*stack)->stacka->num > (*stack)->stacka->next->num)
-			sa(stack);
+			sa(stack, print);
 	}
 	else
 	{
-		sa(stack);
+		sa(stack, print);
 	}
 }
 
-void	tiny_sort(t_stack **stack)
+void	tiny_sort(t_stack **stack, int print)
 {
 	int	size;
 
@@ -60,11 +60,11 @@ void	tiny_sort(t_stack **stack)
 	if (size == 2)
 	{
 		if ((*stack)->stacka->num > (*stack)->stacka->next->num)
-			sa(stack);
+			sa(stack, print);
 	}
 	else if (size == 3)
 	{
-		sort_three(stack);
+		sort_three(stack, print);
 	}
 }
 

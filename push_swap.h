@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 13:24:08 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/04 11:45:01 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/04 12:34:55 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@
 # include "ft_flags.h"
 # include "movements.h"
 
-void	simple(t_stack **order);
-void	medium(t_stack **order);
-void	complex(t_stack **order);
-void	adaptiv(t_stack **order);
 int		strverif(char *str1, char *str2);
 t_list	*parser(char **arg, t_flags **flags, int fla, int w);
 t_list	*parser_int(char **arg, t_flags *flags, int w);
@@ -41,14 +37,15 @@ int		get_position(t_list *stack, int value);
 void	free_stack(t_stack **stack);
 float	disorder(t_list *stack_a);
 void	print_disorder(float d);
-void	tiny_sort(t_stack **stack);
+void	tiny_sort(t_stack **stack, int print);
 void	assign_pos(t_list *stacka);
 int		get_pos_index(t_list *stack, int pos_look);
 int		get_max_index(t_list *stack);
 /* complex sort */
-void	tiny_sort_by_pos(t_stack **stack, int size);
-void	complex(t_stack **stack);
-void	medium(t_stack **stack);
-void	simple(t_stack **stack);
+void	tiny_sort_by_pos(t_stack **stack, int size, int print);
+void	complex(t_stack **stack, int print);
+void	medium(t_stack **stack, int print);
+void	simple(t_stack **stack, int print);
+void	adaptiv(t_stack **order, int print);
 
 #endif
