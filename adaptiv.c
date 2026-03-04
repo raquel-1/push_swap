@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 10:39:16 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/04 10:20:40 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/04 10:22:58 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	adaptiv(t_stack **stack)
 {
 	float	actual_disorder;
-	int		lon;
 
 	if (!stack || !(*stack) || !(*stack)->stacka)
 		return ;
