@@ -6,7 +6,7 @@
 /*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 09:59:52 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/05 13:11:19 by raqroca-         ###   ########.fr       */
+/*   Updated: 2026/03/05 15:52:44 by raqroca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	letercorrect(char **arg)
 		return (0);
 	if (*aux == '-')
 		aux++;
-	if (!*aux)
+	if (!*aux || *aux == ' ')
 		return (0);
 	while (aux && ft_isdigit(*aux))
 		aux++;

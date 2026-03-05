@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 12:46:43 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/04 13:42:38 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/05 16:15:20 by raqroca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	foun_in_arg(char *args, t_flags **flags, char *d, int p[2])
 	}
 }
 
-static void	found_flags(char **args, t_flags **flags)
+static int	found_flags(char **args, t_flags **flags)
 {
 	char	*d[6];
 	int		p[2];
@@ -80,17 +80,24 @@ static void	found_flags(char **args, t_flags **flags)
 		while (p[1] < 5)
 		{
 			aux = *args;
+			if (*aux == '\0')
+				return (1);
 			foun_in_arg(aux, flags, d[p[1]], p);
 			p[1]++;
 		}
 		p[0]++;
 		args++;
 	}
+	return (0);
 }
 
 t_list	*parser(char **arg, t_flags **flags, int fla)
 {
-	found_flags(arg, flags);
+	if (found_flags(arg, flags))
+	{
+		ft_flaclear(flags);
+		return (NULL);
+	}
 	if (ft_flasize(*flags) > fla)
 	{
 		ft_flaclear(flags);
