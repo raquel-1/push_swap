@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asign_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:26:44 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/04 13:41:41 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/05 13:19:37 by raqroca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,11 @@ void	save_numbers(char **arg, t_flags *flags, t_list **stacka)
 			if (verifflag(flag, &ptr))
 				continue ;
 			if (!letercorrect(&ptr, stacka))
+			{
+				ft_flaclear(&flag);
+				ft_flaclear(&flags);
 				return ;
+			}
 		}
 		ft_flaclear(&flag);
 		j++;
