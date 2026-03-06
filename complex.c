@@ -5,74 +5,85 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/26 12:26:07 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/04 12:21:28 by acanadil         ###   ########.fr       */
+/*   Created: 2026/03/03 10:32:37 by raqroca-          #+#    #+#             */
+/*   Updated: 2026/03/06 13:00:55 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 /*
-** This function calculates the number of bits needed to represent 
-** the largest integer in the stack (max_n). 
-**
-** The right shift operator (>>) is used to analyze 
-** the binary structure of the number:
-** 1. In each iteration, we evaluate the value resulting from shifting 'n_bits' 
-** positions to the right.
-** 2. The shift removes the least significant bit (the one on the right).
-** 3. The loop ends when the resulting value is equal to 0, indicating 
-** that all significant bits have been processed.
-**
-** Technical analysis (Example with max_n = 5):
-** - [1] [0] [1] (Value: 5) -> Shift  0: 5 != 0 (True) -> n_bits = 1
-** -  0  [1] [0] (Value: 2) -> Shift  1: 2 != 0 (True) -> n_bits = 2
-** -  0   0  [1] (Value: 1) -> Shift  2: 1 != 0 (True) -> n_bits = 3
-** -  0   0   0  (Value: 0) -> Offset 3: 0 != 0 (False) -> Returns 3
-
-** complex
-** This function sorts large lists (such as 100 or 500 numbers):
-** 1. First, it assigns each number a position (0, 1, 2...).
-** 2. Then, it checks those numbers ‘bit by bit’.
-** 3. If a number has a “0” in that bit, it moves it to Stack B.
-** 4. If it has a “1”, it leaves it in Stack A, sending it to the end.
-** 5. At the end of each round, it returns everything from B to Stack A.
-** 6. It repeats this until all the numbers are in order.
+** CHUNK SORT ALGORITHM (O(n * sqrt(n))):
+** This algorithm divides the stack into multiple "chunks" based on the
+** relative positions (indices) of the numbers.
+** 1. Pre-sorting phase (A to B): Elements are pushed to Stack B if they fall
+** within the current chunk range. If an element is in the lower half of 
+** the current chunk, it's rotated to the bottom of B (rb) to keep 
+** Stack B semi-sorted, reducing future moves.
+** 2. Final sorting phase (B to A): Once A is empty, the algorithm repeatedly
+** finds the maximum value in B and pushes it back to A using the 
+** shortest rotation path (rb or rrb).
 */
-
-static int	count_bits(int max_n)
+int	ft_sqrt(int n)
 {
-	int	n_bits;
+	int	i;
 
-	n_bits = 0;
-	while ((max_n >> n_bits) != 0)
-	{
-		n_bits++;
-	}
-	return (n_bits);
+	if (n <= 0)
+		return (0);
+	i = 1;
+	while (i * i <= n)
+		i++;
+	return (i - 1);
 }
 
-static void	radix_part(t_stack **stack, int i, int size, int print)
+void	return_max_to_a(t_stack **stack, int print)
 {
-	int	j;
+	int	size;
+	int	max_pos;
+	int	i;
 
-	j = 0;
-	while (j < size)
+	size = ft_lstsize((*stack)->stackb);
+	max_pos = get_max_index((*stack)->stackb);
+	i = get_pos_index((*stack)->stackb, max_pos);
+	if (i <= size / 2)
 	{
-		if ((((*stack)->stacka->pos >> i) & 1) == 0)
+		while ((*stack)->stackb->pos != max_pos)
+			rb(stack, print);
+	}
+	else
+	{
+		while ((*stack)->stackb->pos != max_pos)
+			rrb(stack, print);
+	}
+	pa(stack, print);
+}
+
+static void	chunk_algorit(t_stack **stack, int chunk, int print)
+{
+	int	limit;
+
+	limit = 0;
+	while ((*stack)->stacka)
+	{
+		if ((*stack)->stacka->pos <= limit)
+		{
 			pb(stack, print);
+			limit++;
+		}
+		else if ((*stack)->stacka->pos <= (limit + chunk))
+		{
+			pb(stack, print);
+			rb(stack, print);
+			limit++;
+		}
 		else
 			ra(stack, print);
-		j++;
 	}
-	while ((*stack)->stackb != NULL)
-		pa(stack, print);
 }
 
 void	complex(t_stack **stack, int print)
 {
-	int	i;
+	int	chunk;
 	int	size;
-	int	max_bits;
 
 	if (!stack || !(*stack) || !(*stack)->stacka)
 		return ;
@@ -85,11 +96,10 @@ void	complex(t_stack **stack, int print)
 		tiny_sort_by_pos(stack, size, print);
 		return ;
 	}
-	max_bits = count_bits(size - 1);
-	i = 0;
-	while (i < max_bits)
-	{
-		radix_part(stack, i, size, print);
-		i++;
-	}
+	chunk = ft_sqrt(size);
+	if (size >= 50)
+		chunk = chunk * 2;
+	chunk_algorit(stack, chunk, print);
+	while ((*stack)->stackb)
+		return_max_to_a(stack, print);
 }

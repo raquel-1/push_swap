@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 13:24:08 by acanadil          #+#    #+#             */
-/*   Updated: 2026/03/04 13:42:00 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/06 12:59:30 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	tiny_sort(t_stack **stack, int print);
 void	assign_pos(t_list *stacka);
 int		get_pos_index(t_list *stack, int pos_look);
 int		get_max_index(t_list *stack);
+int		ft_sqrt(int n);
+void	return_max_to_a(t_stack **stack, int print);
 /* complex sort */
 void	tiny_sort_by_pos(t_stack **stack, int size, int print);
 void	complex(t_stack **stack, int print);
