@@ -1,16 +1,33 @@
-*This activity has been created as part of the 42 curriculum by acanadil and raqroca-*
+*Este proyecto ha sido creado como parte del currículo de 42 por acanadil, raqroca-.*
 
-# Push Swap - Stack Sorting Algorithm
+# push_swap
+
+## Contributors
+
+- **raqroca-**: Algorithm implementation (simple, medium, complex sorts)
+- **acanadil**: Benchmark mode, movements, parser, bonus, makefile
+
+---
 
 ## Description
 
-Push Swap is an algorithm optimization challenge where the goal is to sort a list of integers using two stacks (A and B) with a limited set of operations, using the minimum number of moves possible.
+push_swap is a sorting algorithm project from the 42 curriculum. The goal is to sort a stack of integers using only two stacks (A and B) and a restricted set of operations, while minimizing the total number of operations used.
 
-The project implements four distinct sorting strategies with different complexity classes:
-- **Simple Strategy** (O(n²)): Insertion sort-based approach
-- **Medium Strategy** (O(n√n)): Chunk/sliding window-based approach  
-- **Complex Strategy** (O(n log n)): Radix sort implementation
-- **Adaptive Strategy**: Selects the best algorithm based on disorder index
+The project requires implementing three sorting algorithms of different complexity classes (O(n²), O(n√n), O(n√n) optimized), a disorder index to measure how unsorted the input is, and an adaptive mode that selects the best strategy automatically based on that index.
+
+The available stack operations are:
+
+| Operation | Description |
+|-----------|-------------|
+| `sa` / `sb` | Swap the first two elements of stack A / B |
+| `ss` | `sa` and `sb` simultaneously |
+| `pa` / `pb` | Push top of B to A / top of A to B |
+| `ra` / `rb` | Rotate A / B upward (top goes to bottom) |
+| `rr` | `ra` and `rb` simultaneously |
+| `rra` / `rrb` | Reverse rotate A / B (bottom goes to top) |
+| `rrr` | `rra` and `rrb` simultaneously |
+
+---
 
 ## Instructions
 
@@ -20,257 +37,114 @@ The project implements four distinct sorting strategies with different complexit
 make
 ```
 
-This will compile the project with the flags `-Wall -Werror -Wextra` and create the `push_swap` executable.
+This produces the `push_swap` binary and, if bonus is enabled, the `checker` binary.
 
-Other Makefile rules:
-- `make clean` - Remove object files
-- `make fclean` - Remove all generated files
-- `make re` - Rebuild the project
+```bash
+make bonus   # builds checker
+make clean   # removes object files
+make fclean  # removes objects and binaries
+make re      # fclean + make
+```
 
 ### Execution
 
-Basic usage:
 ```bash
-./push_swap 4 2 5 6 3
+# Basic usage — prints the move sequence to stdout
+./push_swap 4 2 7 1 5
+
+# Select strategy explicitly
+./push_swap --simple  4 2 7 1 5
+./push_swap --medium  4 2 7 1 5
+./push_swap --complex 4 2 7 1 5
+./push_swap --adaptive 4 2 7 1 5
+
+# Benchmark mode — prints stats to stderr
+./push_swap --bench --complex 4 2 7 1 5
+
+# Checker (bonus) — validates that a move sequence sorts the stack
+./push_swap 4 2 7 1 5 | ./checker 4 2 7 1 5
 ```
 
-With strategy selection:
-```bash
-./push_swap --simple 4 2 5 6 3      # Force O(n²) algorithm
-./push_swap --medium 4 2 5 6 3      # Force O(n√n) algorithm  
-./push_swap --complex 4 2 5 6 3     # Force O(n log n) algorithm
-./push_swap --adaptive 4 2 5 6 3    # Adaptive strategy (default)
-```
-
-With benchmark mode:
-```bash
-./push_swap --bench --simple 4 2 5 6 3 2>bench.txt
-```
-
-The benchmark output includes:
-- Disorder percentage
-- Strategy name and complexity class
-- Total number of operations
-- Breakdown of each operation type (sa, sb, ss, pa, pb, ra, rb, rr, rra, rrb, rrr)
-
-### Bonus: Checker Program
-
-The bonus includes a `checker` program that validates if the generated operations correctly sort the stack:
+### Generating random test inputs
 
 ```bash
-./checker 4 2 5 6 3
-# Then input the operations (one per line)
-# Press Ctrl+D when done
-# Output: OK or KO
+# Test with 100 random numbers
+ARG=$(shuf -i 1-10000 -n 100 | tr '\n' ' ')
+./push_swap --bench --complex $ARG
+
+# Benchmark all strategies for 50, 100 and 500 numbers
+rm -f bench.txt && for n in 50 100 500; do
+    shuf -i 1-10000 -n $n > args.txt
+    echo "=== $n NUMBERS ===" >> bench.txt
+    ./push_swap --simple   $(cat args.txt) --bench 2>>bench.txt >/dev/null
+    ./push_swap --medium   $(cat args.txt) --bench 2>>bench.txt >/dev/null
+    ./push_swap --complex  $(cat args.txt) --bench 2>>bench.txt >/dev/null
+done && cat bench.txt
 ```
-
-## Algorithm Explanations
-
-### Simple Strategy: O(n²) - Insertion Sort
-
-**Principle**: Extracts the minimum element from stack A and inserts it into stack B, then returns elements back in order.
-
-**Implementation**:
-- Finds the smallest unprocessed element
-- Rotates stack A to bring it to the top
-- Pushes it to stack B
-- When stack A is empty, pushes elements back from B to A (largest first)
-
-**Complexity**: O(n²) push/swap/rotate operations
-
-**Performance**: ~1500 ops for 100 numbers, ~8000 ops for 500 numbers
 
 ---
 
-### Medium Strategy: O(n√n) - Sliding Window Chunk Sort
+## Algorithms
 
-**Principle**: Divides the stack into chunks of size √n using a sliding window that adapts as elements are processed.
+### Disorder index
 
-**Implementation**:
-- Calculates chunk size as √n (multiplied by 1.5 for n > 100)
-- Uses a "limit" variable that increments as elements matching the current window are found
-- Elements within the current window range are pushed to B
-- Elements below the window are pushed to B but rotated (rb) to be processed later
-- Elements above the window are rotated in A (ra) to be processed in future windows
-- Once stack A is empty, returns maximum elements from B to A in sorted order
-
-**Key Optimization**: The sliding window adapts dynamically, reducing unnecessary rotations compared to fixed chunk ranges.
-
-**Complexity**: O(n√n) operations in the push_swap model
-
-**Performance**: ~650 ops for 100 numbers, ~4500 ops for 500 numbers
+Before sorting, the program calculates a **disorder index** between 0.0 and 1.0 by counting the number of inversions (pairs of elements that are out of order) divided by the total number of possible pairs. A fully sorted stack has disorder 0.0; a fully reversed stack has disorder ~1.0. This index drives the `--adaptive` strategy selection.
 
 ---
 
-### Complex Strategy: O(n log n) - Radix Short
+### Simple — O(n²) — Selection Sort adaptation
 
-**Principle**: Uses the most efficient algorithm for the input size.
+**How it works:** repeatedly finds the minimum element in Stack A, rotates it to the top using the shortest path (ra if it is in the first half, rra if it is in the second half), and pushes it to B. Once only 3 elements remain in A, a dedicated tiny sort handles them. Finally, all elements are pushed back from B to A in order.
 
-**Implementation**:
-- For n ≤ 5: Uses optimized tiny sort (specialized extraction and 3-element sort)
-- For n > 20: Uses radix sort (bit-by-bit processing)
-
-**Tiny Sort Details** (for n ≤ 5):
-- `sort_two_by_pos()`: Simple comparison and swap
-- `sort_three_by_pos()`: Detects maximum position and applies rotations
-- `sort_four_by_pos()`: Extracts minimum (pos=0), sorts remaining 3, reinserts
-- `sort_five_by_pos()`: Extracts two minimums (pos=0 and pos=1), sorts remaining 3, reinse both
-
-**Radix Sort Details** (for n > 20):
-- Analyzes each bit position of element rankings
-- Pushes elements with 0-bit to B, leaves 1-bit in A
-- Efficiently sorts in O(n log n) moves
-
-**Complexity**: O(n log n) in push_swap model
-
-**Performance**: ~650 ops for 100 numbers, ~4500 ops for 500 numbers
+**Justification:** this is a direct adaptation of selection sort to the two-stack model. Each extraction of the minimum costs O(n) rotations and is repeated n times, giving O(n²) total. It is simple to implement and understand, making it suitable as the baseline algorithm and for very small inputs (≤ 20 numbers) where the overhead of more complex strategies is not justified.
 
 ---
 
-### Adaptive Strategy: Disorder-Based Selection
+### Medium — O(n√n) — Basic Chunk Sort
 
-**Principle**: Chooses the optimal algorithm based on the disorder index of the input.
-
-**Disorder Index Calculation**:
-```
-mistakes = 0
-for all pairs (i, j) where i < j:
-    if a[i] > a[j]:
-        mistakes++
-disorder = mistakes / total_pairs
-```
-
-**Selection Logic**:
-- **Disorder < 0.2** (low disorder): Use simple insertion sort (O(n))
-- **0.2 ≤ Disorder < 0.5** (medium disorder): Use chunk sort O(n√n)
-- **Disorder ≥ 0.5** (high disorder): Use complex O(n log n)
-
-**Rationale**:
-- Nearly-sorted inputs benefit from O(n) algorithms
-- Moderately disordered inputs need O(n√n) optimization
-- Completely random inputs require O(n log n) algorithms
-
-**Threshold Justification**:
-- 0.2: Represents ~20% of pairs out of order; insertion still efficient
-- 0.5: Represents complete randomness; complex algorithm necessary
+**How it works:** normalizes all values to positions 0..n-1 with `assign_pos`. Divides the range into chunks of size √n. In a single pass over A, pushes any element whose position falls within the current chunk to B (pb), otherwise rotates A forward (ra). After every √n pushes, the chunk window advances. Once A is empty, repeatedly finds the maximum in B, rotates B by the shortest path (rb or rrb) to bring it to the top, and pushes it back to A (pa).
+, such as chunk-based sorting, may perform better than alternatives like radix sort for input sizes typically evaluated in the project (n = 100–500)
+**Justification:** dividing into √n chunks means each element is found within at most O(√n) rotations on average during the push phase, and the retrieval phase also costs O(n) total for all maximums. This gives O(n × √n) = O(n√n) overall. No rb optimization is applied during the push phase, so B is unordered within each chunk — this is intentional to keep this version as a clean O(n√n) baseline that is clearly less efficient than the complex version.
 
 ---
 
-## Performance Benchmarks
+### Complex — O(n long n) optimized — Chunk Sort with rb trick
 
-### 100 Random Numbers
-- Minimum requirement: < 2000 operations
-- Good performance: < 1500 operations  
-- Excellent performance: < 700 operations
+**How it works:** same chunk-based structure as Medium, with two key optimizations:
 
-**Our Results**: ~650-700 operations
+1. **rb trick**: when pushing an element to B, if it belongs to the lower half of the current chunk, it is immediately sent to the bottom of B with `rb`. This keeps B semi-sorted in descending order within each chunk, drastically reducing the rotations needed during retrieval.
+2. **Doubled chunk size**: for inputs ≥ 50 elements, the chunk size is set to `√n × 2` instead of `√n`. This reduces the number of ra passes in the push phase by grouping more elements per chunk window.
 
-### 500 Random Numbers
-- Minimum requirement: < 12000 operations
-- Good performance: < 8000 operations
-- Excellent performance: < 5500 operations
+**Justification:** both optimizations target the constant factor of the O(n√n) complexity. The rb trick reduces the average retrieval cost per element from O(n/2) to much less, because B stays partially ordered. The doubled chunk size reduces the number of ra passes by approximately half for large inputs. The result is that this version empirically outperforms a standard O(n log n) radix sort for the input sizes evaluated (100–500 numbers). This is a well-known phenomenon in algorithmics: an algorithm of a lower complexity class with small constants can outperform a theoretically superior one in practical ranges of n.
 
-**Our Results**: ~4500-5000 operations
+---
+
+### Adaptive — disorder-based auto-selection
+
+Selects the strategy automatically based on the disorder index:
+
+| Disorder | Strategy selected |
+|----------|------------------|
+| < 0.2 | Simple O(n²) |
+| 0.2 – 0.5 | Medium O(n√n) |
+| ≥ 0.5 | Complex O(n long n) optimized |
+
+The rationale is that for nearly sorted inputs (low disorder) the overhead of chunk sort is not justified and simple extraction is sufficient. For highly disordered inputs the optimized chunk sort is always the best choice.
+
+---
 
 ## Resources
 
-### Documentation
 - [Algorithm Complexity Analysis - Big O Notation](https://en.wikipedia.org/wiki/Big_O_notation)
 - [Stack Data Structure](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
 - [algoritmos de ordenacion](https://www.freecodecamp.org/espanol/news/algoritmos-de-ordenacion-explicados-con-ejemplos-en-javascript-python-java-y-c/)
 - [Push swap visualizer](https://push-swap42-visualizer.vercel.app/)
 
-### Sorting Algorithm References
-- Insertion Sort: O(n²) simple comparison-based
-- Radix Sort: O(n log n) bit-by-bit processing
-- Chunk Sort: O(n√n) range-based partitioning
+### AI usage
 
-### AI Usage
-
-AI was used for the following tasks:
-
-1. **Algorithm Design and Explanation** (30%):
-   - Brainstorming optimizations for the sliding window chunk sort
-   - Understanding radix sort adaptation for stack operations
-   - Identifying the hybrid approach for complex strategy
-
-2. **Code Documentation** (20%):
-   - Writing clear comments for sorting functions
-   - Generating README explanations
-   - Documenting algorithm complexity reasoning
-
-3. **Testing and Debugging** (25%):
-   - Identifying infinite loop issues in early implementations
-   - Suggesting fixes for sort_four_by_pos() and sort_five_by_pos()
-   - Validating algorithm correctness against test cases
-
-4. **Code Refactoring** (15%):
-   - Suggestions for reducing code duplication
-   - Optimization recommendations for movement efficiency
-   - Style and naming improvements
-
-5. **Performance Optimization** (10%):
-   - Analyzing bottlenecks in chunk sort rotation
-   - Tuning chunk size multiplier (1.5x for large inputs)
-   - Recommending selective algorithm use based on input size
-
-**Important**: All AI-generated code was thoroughly reviewed, tested, and understood before integration. The students took full responsibility for all implementations and can explain every algorithmic decision.
-
-## Contributors
-
-- **raqroca-**: Algorithm implementation (simple, medium, complex sorts)
-- **acanadil**: Benchmark mode, movements, parser, bonus, makefile
+AI was used as a support tool during the development of this project. It assisted in discussing algorithmic approaches, analyzing time complexity (e.g., O(n²), O(n log n)), and exploring possible optimizations for sorting strategies within the constraints of the push_swap project. The AI was also used to clarify theoretical concepts related to algorithm efficiency and to help reason about why certain implementations.
 
 
-## Technical Decisions
-
-### Position-Based Sorting
-The implementation uses position-based sorting (0 to n-1 rankings) rather than direct value comparisons. This allows algorithms to work with consistent indices regardless of the actual values.
-
-### Sliding Window Optimization
-The medium strategy uses a sliding window that increments with each element found, rather than fixed chunk boundaries. This adaptation reduces unnecessary rotations compared to traditional chunk sort.
-
-### Hybrid Complex Strategy
-For very small inputs (n ≤ 5), the complex strategy uses specialized tiny sort functions that are more efficient than radix sort, while maintaining O(n log n) guarantees for larger inputs.
-
-### Error Handling
-The program validates:
-- Non-integer arguments
-- Duplicate values
-- Integer overflow (values > INT_MAX)
-- Empty input handling
-
-All errors output "Error\n" to stderr.
-
-## Testing
-
-Recommended test cases:
-```bash
-# Already sorted
-./push_swap 1 2 3 4 5
-
-# Reverse sorted  
-./push_swap 5 4 3 2 1
-
-# Single element
-./push_swap 42
-
-# Small inputs
-./push_swap 2 1 0
-./push_swap 3 2 0 1 4
-
-# Medium inputs
-shuf -i 0-99 -n 50 | xargs ./push_swap | wc -l
-
-# Large inputs
-shuf -i 0-999 -n 100 | xargs ./push_swap | wc -l
-shuf -i 0-9999 -n 500 | xargs ./push_swap | wc -l
-```
-
-Use the checker to validate correctness:
-```bash
-ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
-```
 ---
 
 **42 School**:  Madrid

@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   complex.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raqroca- <raqroca-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 10:32:37 by raqroca-          #+#    #+#             */
-/*   Updated: 2026/03/06 13:00:55 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/03/06 13:22:44 by raqroca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 /*
-** CHUNK SORT ALGORITHM (O(n * sqrt(n))):
 ** This algorithm divides the stack into multiple "chunks" based on the
 ** relative positions (indices) of the numbers.
 ** 1. Pre-sorting phase (A to B): Elements are pushed to Stack B if they fall
